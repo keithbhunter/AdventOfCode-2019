@@ -26,29 +26,36 @@ func main() {
 		instructions = append(instructions, instruction)
 	}
 
-	instructions[1] = 12
-	instructions[2] = 2
-
-	result := executeInstructions(instructions)
-	fmt.Printf("%v\n", result[0])
+	for i := 0; i < 100; i++ {
+		for j := 0; j < 100; j++ {
+			instructions[1] = i
+			instructions[2] = j
+			if executeInstructions(instructions)[0] == 19690720 {
+				fmt.Printf("noun: %v; verb: %v\n", i, j)
+			}
+		}
+	}
 }
 
 func executeInstructions(instructions []int) []int {
-	for i := 0; i < len(instructions); i += 4 {
-		switch instructions[i] {
+	c := make([]int, len(instructions))
+	copy(c, instructions)
+
+	for i := 0; i < len(c); i += 4 {
+		switch c[i] {
 		case 1:
-			operand1 := instructions[i+1]
-			operand2 := instructions[i+2]
-			resultPosition := instructions[i+3]
-			instructions[resultPosition] = instructions[operand1] + instructions[operand2]
+			operand1 := c[i+1]
+			operand2 := c[i+2]
+			resultPosition := c[i+3]
+			c[resultPosition] = c[operand1] + c[operand2]
 		case 2:
-			operand1 := instructions[i+1]
-			operand2 := instructions[i+2]
-			resultPosition := instructions[i+3]
-			instructions[resultPosition] = instructions[operand1] * instructions[operand2]
+			operand1 := c[i+1]
+			operand2 := c[i+2]
+			resultPosition := c[i+3]
+			c[resultPosition] = c[operand1] * c[operand2]
 		case 99:
 			break
 		}
 	}
-	return instructions
+	return c
 }
