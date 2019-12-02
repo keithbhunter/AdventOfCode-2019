@@ -1,5 +1,14 @@
 package fuelcounterupper
 
 func FuelRequired(mass int) int {
-	return mass/3 - 2
+	totalFuel := 0
+	for {
+		fuel := mass/3 - 2
+		if fuel < 0 {
+			break
+		}
+		totalFuel += fuel
+		mass = fuel
+	}
+	return totalFuel
 }
