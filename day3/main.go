@@ -22,8 +22,8 @@ func main() {
 
 	w1 := newWire(strings[0])
 	w2 := newWire(strings[1])
-	d := determineDistance(w1, w2)
-	fmt.Printf("distance: %d\n", d)
+	s := determineSteps(w1, w2)
+	fmt.Printf("steps: %d\n", s)
 }
 
 func determineDistance(wire1, wire2 *wire) int {
@@ -45,4 +45,25 @@ func determineDistance(wire1, wire2 *wire) int {
 
 func distance(c coordinate) int {
 	return int(math.Abs(float64(c.x)) + math.Abs(float64(c.y)))
+}
+
+func determineSteps(wire1, wire2 *wire) int {
+	minSteps := math.MaxInt32
+
+	for i := 0; i < len(wire1.coordinates); i++ {
+		coord1 := wire1.coordinates[i]
+
+		for j := 0; j < len(wire2.coordinates); j++ {
+			coord2 := wire2.coordinates[j]
+
+			if coord1 == coord2 {
+				steps := i + j + 2
+				if steps < minSteps {
+					minSteps = steps
+				}
+			}
+		}
+	}
+
+	return minSteps
 }
