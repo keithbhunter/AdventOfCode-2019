@@ -29,15 +29,31 @@ func passwordMeetsCriteria(pw string) bool {
 		if left > middle {
 			neverDecrease = false
 		}
+	}
 
-		if left == middle {
-			if i < len(pw) - 1 {
-				right := rune(pw[i+1])
-				if middle != right {
-					hasDouble = true
-				}
+	runeCount := map[rune]int{}
+	for i := 0; i < len(pw); i++ {
+		r := rune(pw[i])
+		if _, ok := runeCount[r]; ok {
+			continue
+		}
+
+		count := 1
+
+		for j := i + 1; j < len(pw); j++ {
+			r2 := rune(pw[j])
+			if r2 == r {
+				count++
+			} else {
+				break
 			}
 		}
+
+		if count == 2 {
+			hasDouble = true
+			break
+		}
+		runeCount[r] = count
 	}
 
 	return hasDouble && neverDecrease

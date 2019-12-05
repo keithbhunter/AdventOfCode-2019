@@ -6,9 +6,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// func TestSuccessfulPasswords(t *testing.T) {
-// 	assert.Equal(t, 1660, numberOfSuccessfulPasswordsInRange(172851, 675869))
-// }
+func TestSuccessfulPasswords(t *testing.T) {
+	assert.Equal(t, 1135, numberOfSuccessfulPasswordsInRange(172851, 675869))
+}
 
 func Test111111MeetsCriteria(t *testing.T) {
 	assert.False(t, passwordMeetsCriteria("111111"))
@@ -36,4 +36,16 @@ func Test111122MeetsCriteria(t *testing.T) {
 
 func Test223333MeetsCriteria(t *testing.T) {
 	assert.True(t, passwordMeetsCriteria("223333"))
+}
+
+func Test788999MeetsCriteria(t *testing.T) {
+	assert.True(t, passwordMeetsCriteria("788999"))
+}
+
+func Test111223MeetsCriteria(t *testing.T) {
+	assert.True(t, passwordMeetsCriteria("111223"))
+}
+
+func Test111222MeetsCriteria(t *testing.T) {
+	assert.False(t, passwordMeetsCriteria("111222"))
 }
