@@ -60,3 +60,47 @@ func (om *orbitMap) numberOfOrbiters(center string) int {
 	}
 	return total
 }
+
+func (om *orbitMap) findMinimumTransfersTo(from, to string) int {
+	transfers := 0
+	c := from
+	for {
+		if t := om.orbitalTransfersTo(c, to); len(t) != 0 {
+			return transfers + len(t) - 3
+		}	
+		c = om.centerOfOrbiter(c)
+		if c == "" {
+			break
+		}
+		transfers++
+	}
+
+	return transfers
+}
+
+func (om *orbitMap) orbitalTransfersTo(from, to string) []string {
+	if orbiters, ok := om.satellites[from]; ok {
+		for _, orbiter := range orbiters {
+			if orbiter == to {
+				return []string{from, to}
+			}
+			
+			r := om.orbitalTransfersTo(orbiter, to)
+			if len(r) != 0 {
+				return append([]string{from}, r...)	
+			}
+		}
+	}
+	return []string{}
+}
+
+func (om *orbitMap) centerOfOrbiter(orbiter string) string {
+	for center, orbiters := range om.satellites {
+		for _, o := range orbiters {
+			if o == orbiter {
+				return center
+			}
+		}
+	}
+	return ""
+}

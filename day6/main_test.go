@@ -18,6 +18,7 @@ func TestInput(t *testing.T) {
 	input := strings.Trim(string(b), "\n")
 	om := createOrbitMap(input)
 	assert.Equal(t, 142915, om.numberOfOrbits())
+	assert.Equal(t, 283, om.findMinimumTransfersTo("YOU", "SAN"))
 }
 
 func TestParseOrbitEntry(t *testing.T) {
@@ -95,4 +96,91 @@ func TestNumberOfOrbits(t *testing.T) {
 	input = strings.ReplaceAll(input, "\t", "")
 	om := createOrbitMap(input)
 	assert.Equal(t, 42, om.numberOfOrbits())
+}
+
+func TestCenterOfOrbiter(t *testing.T) {
+	input := `COM)B
+	B)C
+	C)D
+	D)E
+	E)F
+	B)G
+	G)H
+	D)I
+	E)J
+	J)K
+	K)L
+	K)YOU
+	I)SAN`
+	input = strings.ReplaceAll(input, "\t", "")
+	om := createOrbitMap(input)
+	assert.Equal(t, "K", om.centerOfOrbiter("YOU"))
+}
+
+func TestOrbitalTransfersTo(t *testing.T) {
+	input := `COM)B
+	B)C
+	C)D
+	D)E
+	E)F
+	B)G
+	G)H
+	D)I
+	E)J
+	J)K
+	K)L
+	K)YOU
+	I)SAN`
+
+	t.Run("YOU -> SAN", func(t *testing.T) {
+		input = strings.ReplaceAll(input, "\t", "")
+		om := createOrbitMap(input)
+		assert.Equal(t, []string{}, om.orbitalTransfersTo("YOU", "SAN"))
+	})
+
+	t.Run("D -> SAN", func(t *testing.T) {
+		input = strings.ReplaceAll(input, "\t", "")
+		om := createOrbitMap(input)
+		assert.Equal(t, []string{"D", "I", "SAN"}, om.orbitalTransfersTo("D", "SAN"))
+	})
+
+	t.Run("B -> SAN", func(t *testing.T) {
+		input = strings.ReplaceAll(input, "\t", "")
+		om := createOrbitMap(input)
+		assert.Equal(t, []string{"B", "C", "D", "I", "SAN"}, om.orbitalTransfersTo("B", "SAN"))
+	})
+}
+
+func TestFindMinimumTransfersTo(t *testing.T) {
+	input := `COM)B
+	B)C
+	C)D
+	D)E
+	E)F
+	B)G
+	G)H
+	D)I
+	E)J
+	J)K
+	K)L
+	K)YOU
+	I)SAN`
+
+	t.Run("YOU -> SAN", func(t *testing.T) {
+		input = strings.ReplaceAll(input, "\t", "")
+		om := createOrbitMap(input)
+		assert.Equal(t, 4, om.findMinimumTransfersTo("YOU", "SAN"))
+	})
+
+	t.Run("SAN -> YOU", func(t *testing.T) {
+		input = strings.ReplaceAll(input, "\t", "")
+		om := createOrbitMap(input)
+		assert.Equal(t, 4, om.findMinimumTransfersTo("SAN", "YOU"))
+	})
+
+	t.Run("H -> YOU", func(t *testing.T) {
+		input = strings.ReplaceAll(input, "\t", "")
+		om := createOrbitMap(input)
+		assert.Equal(t, 6, om.findMinimumTransfersTo("H", "YOU"))
+	})
 }
