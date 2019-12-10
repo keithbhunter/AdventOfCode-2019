@@ -12,7 +12,8 @@ func TestInput(t *testing.T) {
 
 // 1,0,0,0,99 becomes 2,0,0,0,99 (1 + 1 = 2).
 func TestExample1(t *testing.T) {
-	result := ExecuteInstructions(1, []int{1, 0, 0, 0, 99}, func(output int) {
+	inputCallback := func() int { return 1 }
+	result := ExecuteInstructions(inputCallback, []int{1, 0, 0, 0, 99}, func(output int) {
 		t.Fatal("there should be no output")
 	})
 	assert.Equal(t, []int{2, 0, 0, 0, 99}, result)
@@ -20,7 +21,8 @@ func TestExample1(t *testing.T) {
 
 // 2,3,0,3,99 becomes 2,3,0,6,99 (3 * 2 = 6).
 func TestExample2(t *testing.T) {
-	result := ExecuteInstructions(1, []int{2, 3, 0, 3, 99}, func(output int) {
+	inputCallback := func() int { return 1 }
+	result := ExecuteInstructions(inputCallback, []int{2, 3, 0, 3, 99}, func(output int) {
 		t.Fatal("there should be no output")
 	})
 	assert.Equal(t, []int{2, 3, 0, 6, 99}, result)
@@ -28,7 +30,8 @@ func TestExample2(t *testing.T) {
 
 // 2,4,4,5,99,0 becomes 2,4,4,5,99,9801 (99 * 99 = 9801).
 func TestExample3(t *testing.T) {
-	result := ExecuteInstructions(1, []int{2, 4, 4, 5, 99, 0}, func(output int) {
+	inputCallback := func() int { return 1 }
+	result := ExecuteInstructions(inputCallback, []int{2, 4, 4, 5, 99, 0}, func(output int) {
 		t.Fatal("there should be no output")
 	})
 	assert.Equal(t, []int{2, 4, 4, 5, 99, 9801}, result)
@@ -36,7 +39,8 @@ func TestExample3(t *testing.T) {
 
 // 1,1,1,4,99,5,6,0,99 becomes 30,1,1,4,2,5,6,0,99.
 func TestExample4(t *testing.T) {
-	result := ExecuteInstructions(1, []int{1, 1, 1, 4, 99, 5, 6, 0, 99}, func(output int) {
+	inputCallback := func() int { return 1 }
+	result := ExecuteInstructions(inputCallback, []int{1, 1, 1, 4, 99, 5, 6, 0, 99}, func(output int) {
 		t.Fatal("there should be no output")
 	})
 	assert.Equal(t, []int{30, 1, 1, 4, 2, 5, 6, 0, 99}, result)
@@ -45,7 +49,8 @@ func TestExample4(t *testing.T) {
 // 3,0,4,0,99 outputs whatever it gets as input, then halts
 func TestExample5(t *testing.T) {
 	output := []int{}
-	result := ExecuteInstructions(1, []int{3, 0, 4, 0, 99}, func(out int) {
+	inputCallback := func() int { return 1 }
+	result := ExecuteInstructions(inputCallback, []int{3, 0, 4, 0, 99}, func(out int) {
 		output = append(output, out)
 	})
 	assert.Equal(t, []int{1, 0, 4, 0, 99}, result)
@@ -54,7 +59,8 @@ func TestExample5(t *testing.T) {
 
 // 1002,4,3,4,33
 func TestExample6(t *testing.T) {
-	result := ExecuteInstructions(1, []int{1002, 4, 3, 4, 33}, func(out int) {
+	inputCallback := func() int { return 1 }
+	result := ExecuteInstructions(inputCallback, []int{1002, 4, 3, 4, 33}, func(out int) {
 		t.Fatal("there should be no output")
 	})
 	assert.Equal(t, []int{1002, 4, 3, 4, 99}, result)
@@ -65,7 +71,8 @@ func TestExample6(t *testing.T) {
 func TestExample7(t *testing.T) {
 	t.Run("input 1", func(t *testing.T) {
 		output := []int{}
-		result := ExecuteInstructions(1, []int{3,9,8,9,10,9,4,9,99,-1,8}, func(out int) {
+		inputCallback := func() int { return 1 }
+		result := ExecuteInstructions(inputCallback, []int{3,9,8,9,10,9,4,9,99,-1,8}, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{3,9,8,9,10,9,4,9,99,0,8}, result)
@@ -74,7 +81,8 @@ func TestExample7(t *testing.T) {
 
 	t.Run("input 8", func(t *testing.T) {
 		output := []int{}
-		result := ExecuteInstructions(8, []int{3,9,8,9,10,9,4,9,99,-1,8}, func(out int) {
+		inputCallback := func() int { return 8 }
+		result := ExecuteInstructions(inputCallback, []int{3,9,8,9,10,9,4,9,99,-1,8}, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{3,9,8,9,10,9,4,9,99,1,8}, result)
@@ -87,7 +95,8 @@ func TestExample7(t *testing.T) {
 func TestExample8(t *testing.T) {
 	t.Run("input 1", func(t *testing.T) {
 		output := []int{}
-		result := ExecuteInstructions(1, []int{3,9,7,9,10,9,4,9,99,-1,8}, func(out int) {
+		inputCallback := func() int { return 1 }
+		result := ExecuteInstructions(inputCallback, []int{3,9,7,9,10,9,4,9,99,-1,8}, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{3,9,7,9,10,9,4,9,99,1,8}, result)
@@ -96,7 +105,8 @@ func TestExample8(t *testing.T) {
 
 	t.Run("input 8", func(t *testing.T) {
 		output := []int{}
-		result := ExecuteInstructions(8, []int{3,9,7,9,10,9,4,9,99,-1,8}, func(out int) {
+		inputCallback := func() int { return 8 }
+		result := ExecuteInstructions(inputCallback, []int{3,9,7,9,10,9,4,9,99,-1,8}, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{3,9,7,9,10,9,4,9,99,0,8}, result)
@@ -109,7 +119,8 @@ func TestExample8(t *testing.T) {
 func TestExample9(t *testing.T) {
 	t.Run("input 1", func(t *testing.T) {
 		output := []int{}
-		result := ExecuteInstructions(1, []int{3,3,1108,-1,8,3,4,3,99}, func(out int) {
+		inputCallback := func() int { return 1 }
+		result := ExecuteInstructions(inputCallback, []int{3,3,1108,-1,8,3,4,3,99}, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{3,3,1108,0,8,3,4,3,99}, result)
@@ -118,7 +129,8 @@ func TestExample9(t *testing.T) {
 
 	t.Run("input 8", func(t *testing.T) {
 		output := []int{}
-		result := ExecuteInstructions(8, []int{3,3,1108,-1,8,3,4,3,99}, func(out int) {
+		inputCallback := func() int { return 8 }
+		result := ExecuteInstructions(inputCallback, []int{3,3,1108,-1,8,3,4,3,99}, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{3,3,1108,1,8,3,4,3,99}, result)
@@ -131,7 +143,8 @@ func TestExample9(t *testing.T) {
 func TestExample10(t *testing.T) {
 	t.Run("input 1", func(t *testing.T) {
 		output := []int{}
-		result := ExecuteInstructions(1, []int{3,3,1107,-1,8,3,4,3,99}, func(out int) {
+		inputCallback := func() int { return 1 }
+		result := ExecuteInstructions(inputCallback, []int{3,3,1107,-1,8,3,4,3,99}, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{3,3,1107,1,8,3,4,3,99}, result)
@@ -140,7 +153,8 @@ func TestExample10(t *testing.T) {
 
 	t.Run("input 8", func(t *testing.T) {
 		output := []int{}
-		result := ExecuteInstructions(8, []int{3,3,1107,-1,8,3,4,3,99}, func(out int) {
+		inputCallback := func() int { return 8 }
+		result := ExecuteInstructions(inputCallback, []int{3,3,1107,-1,8,3,4,3,99}, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{3,3,1107,0,8,3,4,3,99}, result)
@@ -158,7 +172,8 @@ zero or 1 if the input was non-zero:
 func TestExample11(t *testing.T) {
 	t.Run("instr 6: input 1", func(t *testing.T) {
 		output := []int{}
-		result := ExecuteInstructions(1, []int{3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9}, func(out int) {
+		inputCallback := func() int { return 1 }
+		result := ExecuteInstructions(inputCallback, []int{3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9}, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{3,12,6,12,15,1,13,14,13,4,13,99,1,1,1,9}, result)
@@ -167,7 +182,8 @@ func TestExample11(t *testing.T) {
 
 	t.Run("instr 6: input 0", func(t *testing.T) {
 		output := []int{}
-		result := ExecuteInstructions(0, []int{3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9}, func(out int) {
+		inputCallback := func() int { return 0 }
+		result := ExecuteInstructions(inputCallback, []int{3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9}, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{3,12,6,12,15,1,13,14,13,4,13,99,0,0,1,9}, result)
@@ -176,7 +192,8 @@ func TestExample11(t *testing.T) {
 
 	t.Run("instr 5: input 1", func(t *testing.T) {
 		output := []int{}
-		result := ExecuteInstructions(1, []int{3,3,1105,-1,9,1101,0,0,12,4,12,99,1}, func(out int) {
+		inputCallback := func() int { return 1 }
+		result := ExecuteInstructions(inputCallback, []int{3,3,1105,-1,9,1101,0,0,12,4,12,99,1}, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{3,3,1105,1,9,1101,0,0,12,4,12,99,1}, result)
@@ -185,7 +202,8 @@ func TestExample11(t *testing.T) {
 
 	t.Run("instr 5: input 0", func(t *testing.T) {
 		output := []int{}
-		result := ExecuteInstructions(0, []int{3,3,1105,-1,9,1101,0,0,12,4,12,99,1}, func(out int) {
+		inputCallback := func() int { return 0 }
+		result := ExecuteInstructions(inputCallback, []int{3,3,1105,-1,9,1101,0,0,12,4,12,99,1}, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{3,3,1105,0,9,1101,0,0,12,4,12,99,0}, result)
@@ -208,7 +226,8 @@ func TestExample12(t *testing.T) {
 	t.Run("input 1", func(t *testing.T) {
 		t.SkipNow()
 		output := []int{}
-		ExecuteInstructions(1, input, func(out int) {
+		inputCallback := func() int { return 1 }
+		ExecuteInstructions(inputCallback, input, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{999}, output)
@@ -216,7 +235,8 @@ func TestExample12(t *testing.T) {
 
 	t.Run("input 8", func(t *testing.T) {
 		output := []int{}
-		ExecuteInstructions(8, input, func(out int) {
+		inputCallback := func() int { return 8 }
+		ExecuteInstructions(inputCallback, input, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{1000}, output)
@@ -225,7 +245,8 @@ func TestExample12(t *testing.T) {
 	t.Run("input 9", func(t *testing.T) {
 		t.SkipNow()
 		output := []int{}
-		ExecuteInstructions(8, input, func(out int) {
+		inputCallback := func() int { return 8 }
+		ExecuteInstructions(inputCallback, input, func(out int) {
 			output = append(output, out)
 		})
 		assert.Equal(t, []int{1001}, output)

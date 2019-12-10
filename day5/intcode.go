@@ -26,9 +26,9 @@ func executeInput() {
 		instructions = append(instructions, instruction)
 	}
 
-	ExecuteInstructions(5, instructions, func(out int) {
-		fmt.Printf("%v\n", out)
-	})
+	inputCallback := func() int { return 5 }
+	outputCallback := func(out int) { fmt.Printf("%v\n", out) }
+	ExecuteInstructions(inputCallback, instructions, outputCallback)
 }
 
 type OpCode int
@@ -55,7 +55,7 @@ const (
 	ModeImmediate
 )
 
-func ExecuteInstructions(input int, instructions []int, outputCallback func(int)) []int {
+func ExecuteInstructions(inputCallback func() int, instructions []int, outputCallback func(int)) []int {
 	c := make([]int, len(instructions))
 	copy(c, instructions)
 	i := 0
@@ -114,7 +114,7 @@ Loop:
 			}
 			length = 2
 			position := c[i+1]
-			c[position] = input
+			c[position] = inputCallback()
 
 		case OpCodeOutput:
 			length = 2
