@@ -1,30 +1,76 @@
 package main
 
 import (
-	intcode "github.com/keithbhunter/AdventOfCode-2019/day5"
-	"github.com/pkg/errors"
+	"fmt"
+	"time"
 )
+
+const endSignal = -999999999
 
 func main() {}
 
-func tryAmplifierPhaseSequence(s, instructions []int) int {
-	input := 0
-	for _, phase := range s {
-		inputCount := 0
-		inputCallback := func() int {
-			if inputCount == 0 {
-				inputCount++
-				return phase
-			}
-			if inputCount == 1 {
-				return input
-			}
-			panic(errors.Errorf("asked for input too many (%d) times", inputCount))
+func findMaxThruster(s, instructions []int) int {
+	seqs := permutations(s)
+	fmt.Printf("number of sequences: %v\n", len(seqs))
+
+	thrust := 0
+	i := 0
+	for _, seq := range seqs {
+		t := tryAmplifierPhaseSequenceWithFeedback(seq, instructions)
+		fmt.Printf("%v thurst: %v\n", i, t)
+		if t > thrust {
+			thrust = t
 		}
-		outputCallback := func(out int) { input = out }
-		intcode.ExecuteInstructions(inputCallback, instructions, outputCallback)
+		i++
 	}
-	return input
+	return thrust
+}
+
+func tryAmplifierPhaseSequenceWithFeedback(s, instructions []int) int {
+	a1 := newAmp(s[0], instructions)
+	a2 := newAmp(s[1], instructions)
+	a3 := newAmp(s[2], instructions)
+	a4 := newAmp(s[3], instructions)
+	a5 := newAmp(s[4], instructions)
+
+	a1.run()
+	a2.run()
+	a3.run()
+	a4.run()
+	a5.run()
+	firstLoop := true
+
+Loop:
+	for {
+		select {
+		case <-a5.finishedExecuting:
+			break Loop
+
+		default:
+			if firstLoop {
+				a1.input <- 0
+				firstLoop = false
+			}
+
+			select {
+			case i := <-a5.output:
+				a1.input <- i
+			case i := <-a1.output:
+				a2.input <- i
+			case i := <-a2.output:
+				a3.input <- i
+			case i := <-a3.output:
+				a4.input <- i
+			case i := <-a4.output:
+				a5.input <- i
+			default:
+				time.Sleep(5 * time.Millisecond)
+				break
+			}
+		}
+	}
+
+	return a5.lastOutput
 }
 
 func permutations(arr []int) [][]int {
