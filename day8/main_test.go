@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestPart1(t *testing.T) {
+func TestPart1And2(t *testing.T) {
 	f, err := os.Open("input.txt")
 	require.NoError(t, err)
 
@@ -27,8 +27,20 @@ func TestPart1(t *testing.T) {
 		}
 	}
 
+	i.print()
 	result := l.numberOfDigit(1) * l.numberOfDigit(2)
 	assert.Equal(t, 1452, result)
+}
+
+func Test0222112222120000(t *testing.T) {
+	r := strings.NewReader("0222112222120000")
+	i := newImage(size{2, 2}, r)
+
+	expected := [][]int{
+		[]int{0, 1},
+		[]int{1, 0},
+	}
+	assert.Equal(t, expected, i.render.pixels)
 }
 
 func TestNewImage(t *testing.T) {
