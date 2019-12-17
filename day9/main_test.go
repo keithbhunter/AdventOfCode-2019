@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPart1(t *testing.T) {
+func TestPart2(t *testing.T) {
 	b, err := ioutil.ReadFile("input.txt")
 	if err != nil {
 		panic(errors.Wrap(err, "could not read file"))
@@ -30,7 +30,7 @@ func TestPart1(t *testing.T) {
 	c := newComputer(instructions)
 
 	c.input = func() int {
-		return 1
+		return 2
 	}
 
 	out := []int{}
@@ -40,7 +40,7 @@ func TestPart1(t *testing.T) {
 
 	c.run()
 	assert.Len(t, out, 1)
-	assert.Equal(t, 2714716640, out[0])
+	assert.Equal(t, 58879, out[0])
 }
 
 // 109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99 takes no
